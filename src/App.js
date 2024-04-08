@@ -1,6 +1,8 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 
+
+// import words here
 import { qs } from './Questions';
 import { CATEGORIES } from './Categories';
 import Header from './components/Header';
@@ -20,6 +22,7 @@ import Menu from './components/Menu';
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // const [vocab, setVocab] = useState(words);
   const [questions, setQuestions] = useState(qs['general']);
   const [category, setCategory] = useState('general');
 
@@ -46,6 +49,15 @@ function App() {
     setQuestions(qs[category]);
   }, [category]);
 
+
+  // useEffect(() => {
+  //   vocab.map(word => {
+  //     return console.log(word);
+  //   });
+  // }, [vocab]);
+
+
+
   useEffect(() => {
     if (round === 0) return;
     if (round > questions.length) {
@@ -66,16 +78,8 @@ function App() {
 
     setCorrect(gerWord);
     setResultType(false);
-  }, [round]);
+  }, [round, questions]);
 
-
-  // Add keydown event listener
-  // useEffect(() => {
-  //   document.addEventListener('keydown', keyDownHandler);
-  //   return () => {
-  //     document.removeEventListener('keydown', keyDownHandler);
-  //   };
-  // }, [round, showResult]);
 
   function handleRoundChange() { return setRound((round) => round + 1); }
 
@@ -85,7 +89,6 @@ function App() {
   }
 
   function handleAnswer() {
-    console.log(correct, attempt)
     setResultType(attempt === correct);
     setShowResult(true);
   }
@@ -108,17 +111,16 @@ function App() {
 
   const menuElement = <Menu setRound={setRound} category={category} setCategory={setCategory} setMenuOpen={setMenuOpen} setShowResult={setShowResult} />;
 
-  function handleFoo(e) {
-    console.log('this is it', e);
-  }
+  // function handleFoo(e) {
+  //   console.log('this is it', e);
+  // }
 
   // handleKeyDown
   // Maybe read this to help: https://bobbyhadz.com/blog/react-onkeydown-div
   function handleKeyDown(e) {
-    console.log('This is Not Working')
+    //     console.log('This is Not Working')
     if (e.key === 'Enter') {
       e.preventDefault();
-      console.log('round complete: ', roundComplete);
 
       if (round === 0) return handleRoundChange();
       if (round !== 0 && !roundComplete && !showResult) return handleAnswer();

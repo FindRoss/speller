@@ -266,6 +266,7 @@ main {
 
 /* Sidebar */
 
+
 .sidebar-container {
   margin-top: var(--size-500);
   margin-bottom: var(--size-500);
@@ -296,6 +297,7 @@ main {
   min-height: calc(100vh - 70px);
   z-index: 10;
   width: 0;
+  padding-top: 2rem;
 }
 
 .sidebar-show {

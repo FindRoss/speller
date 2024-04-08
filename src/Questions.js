@@ -1,3 +1,23 @@
+
+
+export const words = [
+  { word: 'Ich', type: 'Noun', level: 1 },
+  { word: 'bezahle', type: 'Verb', level: 1 },
+  { word: 'mit', type: 'Preposition', level: 2 },
+  { word: 'Karte', type: 'Noun', level: 1 },
+  { word: 'Der', type: 'Article', level: 1 },
+  { word: 'Bus', type: 'Noun', level: 1 },
+  { word: 'fährt', type: 'Verb', level: 1 },
+  { word: 'jede', type: 'Determiner', level: 1 },
+  { word: 'Stunde', type: 'Noun', level: 1 },
+  { word: 'Meine', type: 'Determiner', level: 1 },
+  { word: 'beiden', type: 'Determiner', level: 1 },
+  { word: 'Schwestern', type: 'Noun', level: 1 },
+  { word: 'haben', type: 'Verb', level: 1 },
+  { word: 'braune', type: 'Adjective', level: 1 },
+  { word: 'Augen', type: 'Noun', level: 1 }
+];
+
 export const qs = {
   general: [
     {
@@ -107,8 +127,8 @@ export const qs = {
       german: "Hier haben meine Eltern und ich vor vielen Jahren gewohnt"
     },
     {
-      english: "The carpet under Petra’s shoes is soft",
-      german: "Der Teppich unter Petra’s Schuhen ist weich"
+      english: "The carpet under Petra's shoes is soft",
+      german: "Der Teppich unter Petra's Schuhen ist weich"
     },
     {
       english: "Petra stood up and looked for something in the wardrobe",
