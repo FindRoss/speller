@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { qs } from './Questions';
 import { CATEGORIES } from './Categories';
 import Header from './components/Header';
+import Menu from './components/Menu';
 
 
 
@@ -23,40 +24,60 @@ function App() {
   const [category, setCategory] = useState('general');
 
   const [round, setRound] = useState(0);
-  const [attempt, setAttempt] = useState('');
-  const [correct, setCorrect] = useState('');
-
   const [showResult, setShowResult] = useState(false);
   const [resultType, setResultType] = useState(true);
   const [roundComplete, setRoundComplete] = useState(false);
 
   const [englishSentence, setEnglishSentence] = useState('');
   const [germanSentence, setGermanSentence] = useState('');
-  const [germanInputSentence, setGermanInputSentence] = useState('');
+  const [germanInputSentence, setGermanInputSentence] = useState([]);
+  const [attempt, setAttempt] = useState('');
+  const [correct, setCorrect] = useState('');
 
+  function TextInput({ gerWord }) {
+    return (
+      <>
+        <input autoFocus type="text" className="attempt" style={{ width: `${gerWord.length + 2}ch` }} onChange={(e) => setAttempt(e.target.value)} />
+      </>
+    )
+  }
 
   useEffect(() => {
     setQuestions(qs[category]);
   }, [category]);
 
-  function handleRoundChange() {
-    // END GAME WHEN
-    if (round === questions.length) {
-      setShowResult(false);
-      setRoundComplete(true);
+  useEffect(() => {
+    if (round === 0) return;
+    if (round > questions.length) {
+      setShowResult(false)
+      setRoundComplete(true)
       return;
-    }
+    };
+    const ger = questions[round - 1].german;
+    setGermanSentence(ger)
+    const eng = questions[round - 1].english;
+    setEnglishSentence(eng)
 
-    // IF GAME STILL GOING, CHANGE ROUND
-    setRound((round) => round + 1);
+    const gerArr = ger.split(' ');
+    const randomNum = Math.floor(Math.random() * gerArr.length);
+    const gerWord = gerArr[randomNum];
 
-    setEnglishSentence(questions[round].english)
-    setGermanSentence(questions[round].german)
-    const { output, gerWord } = replaceWordWithInput(questions[round].german);
-    setGermanInputSentence(output);
+    setGermanInputSentence(gerArr.map((word, index) => (index !== randomNum) ? word : <TextInput gerWord={gerWord} />));
+
     setCorrect(gerWord);
     setResultType(false);
-  }
+  }, [round]);
+
+
+  // Add keydown event listener
+  // useEffect(() => {
+  //   document.addEventListener('keydown', keyDownHandler);
+  //   return () => {
+  //     document.removeEventListener('keydown', keyDownHandler);
+  //   };
+  // }, [round, showResult]);
+
+  function handleRoundChange() { return setRound((round) => round + 1); }
 
   function handleNextQuestion() {
     setShowResult(false);
@@ -64,12 +85,8 @@ function App() {
   }
 
   function handleAnswer() {
-    // useRef is better for this I think?
-    // https://www.upbeatcode.com/react/how-to-use-queryselector-in-react/
-    let answer = document.querySelector('.attempt').value
-    setAttempt(answer);
-
-    setResultType(answer === correct);
+    console.log(correct, attempt)
+    setResultType(attempt === correct);
     setShowResult(true);
   }
 
@@ -80,13 +97,38 @@ function App() {
   }
 
   function handleNextRound() {
-    console.log('handleNEXTRound');
+    const indexNum = CATEGORIES.map(c => c.name).indexOf(category);
+    const nextCat = (indexNum === CATEGORIES.length - 1) ? CATEGORIES[0].name : CATEGORIES[indexNum + 1].name;
+
+    setShowResult(false);
+    setRound(0);
+    setRoundComplete(false);
+    setCategory(nextCat);
   }
 
-  const menuElement = <MenuItems setRound={setRound} category={category} setCategory={setCategory} setMenuOpen={setMenuOpen} setShowResult={setShowResult} />;
+  const menuElement = <Menu setRound={setRound} category={category} setCategory={setCategory} setMenuOpen={setMenuOpen} setShowResult={setShowResult} />;
+
+  function handleFoo(e) {
+    console.log('this is it', e);
+  }
+
+  // handleKeyDown
+  // Maybe read this to help: https://bobbyhadz.com/blog/react-onkeydown-div
+  function handleKeyDown(e) {
+    console.log('This is Not Working')
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      console.log('round complete: ', roundComplete);
+
+      if (round === 0) return handleRoundChange();
+      if (round !== 0 && !roundComplete && !showResult) return handleAnswer();
+      if (showResult) return handleNextQuestion();
+      if (roundComplete) return console.log('round COMPLEE');
+    }
+  };
 
   return (
-    <div className="">
+    <div tabIndex={-1} onKeyDown={handleKeyDown}>
       <Header setMenuOpen={setMenuOpen} />
       <div className={`sidebar ${menuOpen ? 'sidebar-show' : null}`}>
         <div className="sidebar-content">
@@ -102,7 +144,7 @@ function App() {
             <div className="panel__wrapper">
               {/* HEADING */}
               <div className="category__header" id="category">
-                <h1 className="category__title" style={{ backgroundColor: CATEGORIES.find(cat => cat.name === category).color }}>{category}</h1>
+                <h1 className={`category__title ${category}`}>{category}</h1>
                 <div className="round">
                   {(round === 0) ? `${questions.length} Questons` : `Question ${round} of ${questions.length}`}
                 </div>
@@ -116,7 +158,7 @@ function App() {
                       <p>{CATEGORIES.find(cat => cat.name === category).description}</p>
                     </div>
                     <div className="panel__btn-wrapper">
-                      <button className="panel__btn" onClick={handleRoundChange}>Start Round</button>
+                      <button className={`panel__btn ${category}`} onClick={handleRoundChange}>Start Round</button>
                     </div>
                   </>
                 )
@@ -126,10 +168,15 @@ function App() {
                 (round !== 0 && !roundComplete && !showResult) && (
                   <>
                     <div className="panel__card"><span className="lang">English</span>{englishSentence}</div>
-                    <div className="panel__card"><span className="lang">German</span>{germanInputSentence}</div>
+                    <div className="panel__card"><span className="lang">German</span>
+                      {germanInputSentence.map(g => {
+                        if (typeof g === 'string') return <span key={g}>{g} </span>;
+                        return <span key="input-g">{g}</span>;
+                      })}
+                    </div>
                     {/* SUBMIT BUTTON */}
                     <div className="panel__btn-wrapper">
-                      <button className="panel__btn" type="submit" onClick={handleAnswer}>Answer</button>
+                      <button className={`panel__btn ${category}`} type="submit" onClick={handleAnswer}>Answer</button>
                     </div>
                   </>
                 )
@@ -183,47 +230,33 @@ function App() {
 export default App;
 
 
-function MenuItems({ category, setCategory, setRound, setMenuOpen, setShowResult }) {
 
-  function handleCategoryClick(catName) {
-    setCategory(catName);
-    setShowResult(false);
-    setRound(0);
-    setMenuOpen(false);
-  }
 
-  return (
-    <ul className="sidebar-pills">
-      {CATEGORIES.map((cat) => (
-        <li key={cat.name}>
-          <span className={`pill-title ${(cat.name === category) ? ' active' : null}`} onClick={() => handleCategoryClick(cat.name)} style={{ backgroundColor: cat.color }}>{cat.name} ({qs[cat.name].length})</span>
-        </li>
-      ))}
-    </ul>
-  )
-};
+
 
 // Replace One Word In The Sentence With An Input
-function replaceWordWithInput(text) {
-  const textArr = text.split(' ');
-  // Get a random word from the current sentence. 
-  const randomNum = Math.floor(Math.random() * textArr.length);
-  let gerWord = textArr[randomNum];
-  // Check Each Word For ? And Trim
-  if (gerWord.includes('?')) gerWord = gerWord.replace('?', '');
-  // Check Each Word For . And Trim
-  if (gerWord.includes('.')) gerWord = gerWord.replace('.', '');
-  // Create the input 
-  let span = document.createElement('span');
-  let input = document.createElement('input');
-  input.classList.add('attempt');
-  input.style.width = `${gerWord.length + 2}ch`;
-  span.appendChild(input);
-  // Replace the chosen word in the array with the input
-  textArr.splice(randomNum, 1, span.outerHTML);
-  const output = <div dangerouslySetInnerHTML={{ __html: textArr.join(' ') }}></div>;
-  return { output, gerWord }
-};
+// function replaceWordWithInput(text) {
+//   const textArr = text.split(' ');
+//   // Get a random word from the current sentence. 
+//   const randomNum = Math.floor(Math.random() * textArr.length);
+//   let gerWord = textArr[randomNum];
+//   // Check Each Word For ? And Trim
+//   if (gerWord.includes('?')) gerWord = gerWord.replace('?', '');
+//   // Check Each Word For . And Trim
+//   if (gerWord.includes('.')) gerWord = gerWord.replace('.', '');
+//   // Create the input 
+//   let span = document.createElement('span');
+//   let input = document.createElement('input');
+//   input.classList.add('attempt');
+//   input.style.width = `${gerWord.length + 2}ch`;
+//   // Handle onKeyPress event
+//   // input.addEventListener('keypress', () => console.log('working here'));
+//   span.appendChild(input);
+//   // Replace the chosen word in the array with the input
+//   textArr.splice(randomNum, 1, span.outerHTML);
+//   const output = <div dangerouslySetInnerHTML={{ __html: textArr.join(' ') }}></div>;
+//   return { output, gerWord }
+// };
 
 /* 
   Click answer!

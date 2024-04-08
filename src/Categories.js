@@ -22,20 +22,6 @@ export const CATEGORIES = [
     description: "Practise some holiday phrases so you can tell (read: boast) all your friends about the distant, exotic places you will be travelling to"
   },
   {
-    name: "work",
-    color: "#F76969",
-    colorDark: "#D7263D",
-    subtitle: "Work at phrases about the workplace",
-    description: "People like nothing more than complaining about their work, so learn how to complain eloquently in Germany"
-  },
-  {
-    name: "weather",
-    color: "#006886",
-    colorDark: "#005168",
-    subtitle: "Nice day today?",
-    description: "Whether the sun is shining or the skies are gloomy, say it in German with these weather based phrases"
-  },
-  {
     name: "home",
     color: "#F7E069",
     colorDark: "#ABAB19",
@@ -48,5 +34,19 @@ export const CATEGORIES = [
     colorDark: "#1F7A8C",
     subtitle: "Getting around the city or jet setting",
     description: "Learn how to talk about movement and moving around the city."
+  },
+  {
+    name: "weather",
+    color: "#006886",
+    colorDark: "#005168",
+    subtitle: "Nice day today?",
+    description: "Whether the sun is shining or the skies are gloomy, say it in German with these weather based phrases"
+  },
+  {
+    name: "work",
+    color: "#F76969",
+    colorDark: "#D7263D",
+    subtitle: "Work at phrases about the workplace",
+    description: "People like nothing more than complaining about their work, so learn how to complain eloquently in Germany"
   },
 ];

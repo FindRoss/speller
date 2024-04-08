@@ -5,6 +5,20 @@
   --size-500: 1.414rem;
   --size-600: 2rem;
   --size-700: 3rem;
+  --color-100: #4299e1;
+  --color-150: #2b6cb0;
+  --color-200: #f78e69;
+  --color-250: #d7592c;
+  --color-300: #5ca6cf;
+  --color-350: #4653c6;
+  --color-400: #f7e069;
+  --color-450: #abab19;
+  --color-500: #48a9a6;
+  --color-550: #1f7a8c;
+  --color-600: #f76969;
+  --color-650: #d7263d;
+  --color-700: #006886;
+  --color-750: #005168;
   --ff-main: Montserrat, cursive;
   /* Lobster, Roboto,  */
   --radius: var(--size-300);
@@ -85,10 +99,37 @@ button {
 }
 
 .panel__btn {
-  background: var(--accent-color);
   color: #fff;
-  /* border: 2px solid #fff; */
+  background: var(--color-100);
   border-bottom: 2px solid #2b6cb0;
+}
+
+.pill-title.general.active {
+  border-color: #2b6cb0;
+}
+.panel__btn.body {
+  background: var(--color-200);
+  border-bottom: 2px solid var(--color-250);
+}
+.panel__btn.holidays {
+  background: var(--color-300);
+  border-bottom: 2px solid var(--color-350);
+}
+.panel__btn.home {
+  background: var(--color-400);
+  border-bottom: 2px solid var(--color-450);
+}
+.panel__btn.travel {
+  background: var(--color-500);
+  border-bottom: 2px solid var(--color-550);
+}
+.panel__btn.weather {
+  background: var(--color-600);
+  border-bottom: 2px solid var(--color-650);
+}
+.panel__btn.work {
+  background: var(--color-700);
+  border-bottom: 2px solid var(--color-750);
 }
 
 .panel__btn:hover {
@@ -102,8 +143,8 @@ button {
 }
 
 .header__title {
-  font-size: var(--size-600);
-  color: var(--accent-color);
+  font-size: var(--size-700);
+  color: var(--color-750);
   font-family: var(--ff-main);
   font-weight: bold;
   flex: 1;
@@ -145,6 +186,25 @@ main {
   text-transform: capitalize;
   border-radius: 180px;
   display: inline-block;
+  background: var(--color-100);
+}
+.category__title.body {
+  background: var(--color-200);
+}
+.category__title.holidays {
+  background: var(--color-300);
+}
+.category__title.home {
+  background: var(--color-400);
+}
+.category__title.travel {
+  background: var(--color-500);
+}
+.category__title.weather {
+  background: var(--color-600);
+}
+.category__title.work {
+  background: var(--color-700);
 }
 
 .round {
@@ -171,7 +231,6 @@ main {
   left: 0.3rem;
   font-size: 0.8rem;
   font-family: var(--ff-main);
-  font-weight: bold;
   background: #fff;
   padding: 0.15rem 0.45rem;
   border-radius: 100px;
@@ -302,7 +361,56 @@ main {
 }
 
 .pill-title.active {
-  border: 3px solid #000;
+  border: 3px solid;
+}
+
+.pill-title.general {
+  background: var(--color-100);
+}
+.pill-title.general.active {
+  border-color: var(--color-150);
+}
+
+.pill-title.body {
+  background: var(--color-200);
+}
+.pill-title.body.active {
+  border-color: var(--color-250);
+}
+
+.pill-title.holidays {
+  background: var(--color-300);
+}
+.pill-title.holidays.active {
+  border-color: var(--color-350);
+}
+
+.pill-title.home {
+  background: var(--color-400);
+}
+.pill-title.home.active {
+  border-color: var(--color-450);
+}
+
+.pill-title.travel {
+  background: var(--color-500);
+}
+.pill-title.travel.active {
+  border-color: var(--color-550);
+}
+
+.pill-title.weather {
+  background: var(--color-600);
+}
+.pill-title.weather.active {
+  border-color: var(--color-650);
+}
+
+.pill-title.work {
+  background: var(--color-700);
+}
+.pill-title.work.active {
+  border-color: var(--color-750);
 }
 
 @media screen and (max-width: 750px) {
