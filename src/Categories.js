@@ -4,8 +4,7 @@ export const CATEGORIES = [
     color: "#4299E1",
     colorDark: "#2B6CB0",
     subtitle: "Complete general German sentances",
-    description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias a deleniti sed rerum ea. Nobis ab mollitia ea voluptates dolorum.",
-    questions: []
+    description: "Get started with general German phrases and see how far you can get!"
   },
   {
     name: "body",

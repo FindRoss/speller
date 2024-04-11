@@ -1,5 +1,4 @@
-
-
+// An idea
 export const words = [
   { word: 'Ich', type: 'Noun', level: 1 },
   { word: 'bezahle', type: 'Verb', level: 1 },
@@ -18,6 +17,7 @@ export const words = [
   { word: 'Augen', type: 'Noun', level: 1 }
 ];
 
+
 export const qs = {
   general: [
     {
@@ -28,10 +28,10 @@ export const qs = {
       english: "The bus runs every hour.",
       german: "Der Bus fährt jede Stunde."
     },
-    {
-      english: "Both of my sisters have brown eyes?",
-      german: "Meine beiden Schwestern haben braune Augen?"
-    },
+    // {
+    //   english: "Both of my sisters have brown eyes?",
+    //   german: "Meine beiden Schwestern haben braune Augen?"
+    // },
   ],
   body: [
     {

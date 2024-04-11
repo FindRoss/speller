@@ -1,14 +1,11 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 
-
 // import words here
 import { qs } from './Questions';
 import { CATEGORIES } from './Categories';
 import Header from './components/Header';
 import Menu from './components/Menu';
-
-
 
 // Add Next Catefory or New Round
 // Add End of Game Summary
@@ -18,11 +15,9 @@ import Menu from './components/Menu';
 // Show Rounds
 // Show Complete
 
-
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // const [vocab, setVocab] = useState(words);
   const [questions, setQuestions] = useState(qs['general']);
   const [category, setCategory] = useState('general');
 
@@ -49,15 +44,6 @@ function App() {
     setQuestions(qs[category]);
   }, [category]);
 
-
-  // useEffect(() => {
-  //   vocab.map(word => {
-  //     return console.log(word);
-  //   });
-  // }, [vocab]);
-
-
-
   useEffect(() => {
     if (round === 0) return;
     if (round > questions.length) {
@@ -73,22 +59,28 @@ function App() {
     const gerArr = ger.split(' ');
     const randomNum = Math.floor(Math.random() * gerArr.length);
     const gerWord = gerArr[randomNum];
+    const gerWordStripped = gerWord.replace(/\./g, '')
 
     setGermanInputSentence(gerArr.map((word, index) => (index !== randomNum) ? word : <TextInput gerWord={gerWord} />));
 
-    setCorrect(gerWord);
+    setCorrect(gerWordStripped);
     setResultType(false);
   }, [round, questions]);
 
-
-  function handleRoundChange() { return setRound((round) => round + 1); }
+  function handleRoundChange() {
+    setRound((round) => round + 1)
+  }
 
   function handleNextQuestion() {
     setShowResult(false);
+    setAttempt('');
     handleRoundChange()
   }
 
   function handleAnswer() {
+    // Only deal with the answer if there actually is one
+    if (attempt === '') return alert('please enter something');
+
     setResultType(attempt === correct);
     setShowResult(true);
   }
@@ -111,26 +103,23 @@ function App() {
 
   const menuElement = <Menu setRound={setRound} category={category} setCategory={setCategory} setMenuOpen={setMenuOpen} setShowResult={setShowResult} />;
 
-  // function handleFoo(e) {
-  //   console.log('this is it', e);
-  // }
-
   // handleKeyDown
-  // Maybe read this to help: https://bobbyhadz.com/blog/react-onkeydown-div
   function handleKeyDown(e) {
-    //     console.log('This is Not Working')
+    console.log(e);
     if (e.key === 'Enter') {
       e.preventDefault();
+
+      console.log(roundComplete);
 
       if (round === 0) return handleRoundChange();
       if (round !== 0 && !roundComplete && !showResult) return handleAnswer();
       if (showResult) return handleNextQuestion();
-      if (roundComplete) return console.log('round COMPLEE');
+      if (roundComplete) return handleReplayRound();
     }
   };
 
   return (
-    <div tabIndex={-1} onKeyDown={handleKeyDown}>
+    <div tabIndex={0} onKeyDown={handleKeyDown}>
       <Header setMenuOpen={setMenuOpen} />
       <div className={`sidebar ${menuOpen ? 'sidebar-show' : null}`}>
         <div className="sidebar-content">
@@ -146,9 +135,10 @@ function App() {
             <div className="panel__wrapper">
               {/* HEADING */}
               <div className="category__header" id="category">
-                <h1 className={`category__title ${category}`}>{category}</h1>
+                <h1 className="category__title">{category}</h1>
                 <div className="round">
-                  {(round === 0) ? `${questions.length} Questons` : `Question ${round} of ${questions.length}`}
+                  {round === 0 && `${questions.length} Questons`}
+                  {(round !== 0 && !roundComplete && !showResult) && (`Question ${round} of ${questions.length}`)}
                 </div>
               </div>
               {/* START THE ROUND */}
@@ -157,7 +147,7 @@ function App() {
                   <>
                     <div className="panel__card">
                       <h2 className="ff-heading">{CATEGORIES.find(cat => cat.name === category).subtitle}</h2>
-                      <p>{CATEGORIES.find(cat => cat.name === category).description}</p>
+                      <p className="panel__card--description">{CATEGORIES.find(cat => cat.name === category).description}</p>
                     </div>
                     <div className="panel__btn-wrapper">
                       <button className={`panel__btn ${category}`} onClick={handleRoundChange}>Start Round</button>
@@ -169,8 +159,10 @@ function App() {
               {
                 (round !== 0 && !roundComplete && !showResult) && (
                   <>
-                    <div className="panel__card"><span className="lang">English</span>{englishSentence}</div>
-                    <div className="panel__card"><span className="lang">German</span>
+                    <span className="lang">English</span>
+                    <div className="panel__card sentence">{englishSentence}</div>
+                    <span className="lang">German</span>
+                    <div className="panel__card sentence">
                       {germanInputSentence.map(g => {
                         if (typeof g === 'string') return <span key={g}>{g} </span>;
                         return <span key="input-g">{g}</span>;
@@ -201,8 +193,10 @@ function App() {
                       )
                     }
                   </div>
-                  <div className="panel__card"><span className="lang">English</span>{englishSentence}</div>
-                  <div className="panel__card"><span className="lang">German</span>{germanSentence}</div>
+                  <span className="lang">English</span>
+                  <div className="panel__card sentence">{englishSentence}</div>
+                  <span className="lang">German</span>
+                  <div className="panel__card sentence">{germanSentence}</div>
                   <div className="panel__btn-wrapper">
                     {(round - 2) === questions.length ? <button className="panel__btn" type="submit" onClick={handleNextQuestion}>Next Question</button> : <button className="panel__btn" type="submit" onClick={handleNextQuestion}>Next Question</button>}
                   </div>

@@ -14,7 +14,7 @@ function Menu({ category, setCategory, setRound, setMenuOpen, setShowResult }) {
     <ul className="sidebar-pills">
       {CATEGORIES.map((cat) => (
         <li key={cat.name}>
-          <span className={`pill-title ${cat.name} ${(cat.name === category) ? 'active' : null}`} onClick={() => handleCategoryClick(cat.name)}>{cat.name} ({qs[cat.name].length})</span>
+          <span className={`pill-title ${(cat.name === category) ? 'active' : null}`} onClick={() => handleCategoryClick(cat.name)}>{cat.name} ({qs[cat.name].length})</span>
         </li>
       ))}
     </ul>
